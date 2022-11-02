@@ -12,9 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.services.UserService;
 
-//************************************
-//*** REST CONTROLER (HTTP)  ***
-//***********************************
+//******************************************************************************
+//***                       REST CONTROLER (HTTP)                            ***
+// Web resource for class User -  
+// Anottation @RestController tells that this classe implements a 
+// REST controller
+// Annotation @RequestMapping tells what is the name of endpoint that 
+// is embedded in the GET message
+//*****************************************************************************
 
 @RestController
 @RequestMapping(value = "/users")
@@ -29,27 +34,31 @@ public class UserResource {
 	@Autowired
 	private UserService service;
 
-	
+	//************************************************************************************
 	// ENDPOINT findAll()
-	
+	//************************************************************************************	//
+ 
+	// @GetMapping annotation indicates HTTP requisition is a GET type
 	@GetMapping
 	public ResponseEntity<List<User>> findAll() {
 
 		// instanciate a User list calling Service Layer findAll()
 		List<User> list = service.findAll();
 
-		// return list of users
+		// return list of users 
+		// OK send success message to HTTP
 		return ResponseEntity.ok().body(list);
 	}
 
-	// annotation indicates HTTP requisition is a GET type
-	// I must inform that GET requisition ask for a parameter (id)
-	// I must inform as well inform to Spring that parameter of the
-	// function is a parameter of GET requisition, so the need of
-	// @PathVariable annotation
+	// @GetMapping annotation indicates HTTP requisition is a GET type
+	// I must inform that GET requisition ask for a parameter (value = "/{id}")
+	// so that parameter of the function is a parameter of GET requisition, 
+	// so the need of @PathVariable annotation
 
-	
+	//************************************************************************************
 	// ENDPOINT findById()
+	//************************************************************************************	//
+ 
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {

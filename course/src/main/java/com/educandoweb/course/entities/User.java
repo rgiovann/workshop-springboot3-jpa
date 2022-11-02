@@ -1,25 +1,55 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+//********************************************************************
+// Annotations below instruct JPA how to convert objects to
+// relational database model.
+// @Entity --> always import specification not implementation! 
+// in this case "jakarta.persistence.Entity" and not the 
+// Hibernate implementation
+// @Table change the name of the table "User" to "tb_user" since
+// User is a reserved word for H2 databse
+//********************************************************************
+
 
 @Entity
 @Table(name = "tb_user")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	// @Id annotation tells JPA wich primary key database uses, 
+	// in our case is
+	// @GeneratedValue annotation tells JPA that the key is autoicremented by
+	// the data base GenerationType.IDENTITY
+	// https://www.devmedia.com.br/jpa-como-usar-a-anotacao-id/38508
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String name;
 	private String email;
 	private String phone;
 	private String password;
+	
+	// List is a collection
+	// One client can have many orders, so this relationship
+	// is addressed by @OneToMany annotation
+	// Client is mapped in Order class by attribute "client"
+	
+	
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<Order>();
 
 	public User() {
 	}
@@ -72,6 +102,10 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public List<Order> getOrders() {
+		return orders;
+	}	
 
 	@Override
 	public int hashCode() {
@@ -97,4 +131,5 @@ public class User implements Serializable {
 			return false;
 		return true;
 	}
+
 }
