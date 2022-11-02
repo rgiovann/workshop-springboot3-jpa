@@ -4,6 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.educandoweb.course.entities.User;
 
+//***************************************************************************
+// No need to register as @Repository this interface since it inherits from
+// JpaRepository class this one already registered as @Repository
+//***************************************************************************
+
 public interface UserRepository extends JpaRepository<User, Long> {
 
 }

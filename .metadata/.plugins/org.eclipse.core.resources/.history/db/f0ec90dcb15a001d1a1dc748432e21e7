@@ -1,0 +1,25 @@
+package com.educandoweb.course.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.educandoweb.course.entities.User;
+import com.educandoweb.course.repositories.UserRepository;
+
+public class UserService {
+	
+	// UserService have a dependency from UserRepository
+	// @Autorwired wraps the dependency injection, coder
+	// doesn´t need to worry about coding the pattern 
+	@Autowired
+	private UserRepository repository;
+	
+	// create method to return all users from DB
+	
+	public List<User> findAll() {
+		return repository.findAll();
+		
+	}
+
+}
