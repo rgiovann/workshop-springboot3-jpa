@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,7 +49,17 @@ public class User implements Serializable {
 	// is addressed by @OneToMany annotation
 	// Client is mapped in Order class by attribute "client"
 	
+	// Annotation @JsonIgnore
+	// Marker annotation that indicates that the logical property that the accessor
+	// (field, getter/setter method or Creator parameter[of JsonCreator-annotated 
+	// constructor or factory method]) is to be ignored by introspection-basedserialization 
+	// and deserialization functionality. 
+	// To avoid loop caused by bidirecional relationship between User and Order.
 	
+	// LAZY LOADING, relationships OneToMany JPA does not allow to load the associated objets, because of
+	// (potential) trafic overloading issues.
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	private List<Order> orders = new ArrayList<Order>();
 
