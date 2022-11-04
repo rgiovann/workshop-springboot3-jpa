@@ -49,6 +49,11 @@ public class OrderItem implements Serializable {
 		id.setOrder(order);
 	}
 	
+	// now when I request a order, I wanna show
+	// OrderItems and for each OrderItem I wanna 
+	// show product details, thus I enable access to
+	// DB while rendering JSON, thus remove @JsonIgnore
+	// @JsonIgnore
 	public Product getProduct()
 	{
 		return id.getProduct();

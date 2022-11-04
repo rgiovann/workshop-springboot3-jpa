@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
  
 @Entity
@@ -38,12 +40,17 @@ public class Product implements Serializable {
 	joinColumns = @JoinColumn (name ="product_id"),
 	inverseJoinColumns = @JoinColumn(name ="category_id"))
 	private Set<Category> categories = new HashSet<Category>();
+	
+	// One Order to many OrderItens, but 
+	// id of OrderItem id is composite and
+	// thus must map by id.order.
+	@OneToMany( mappedBy = "id.product")
+	private Set<OrderItem> items = new HashSet<OrderItem>();
 
 	public Product() {
 		
 	}
-	
-		
+			
 	public Product(Long id, String name, String description, Double price, String imgUrl) {
 		super();
 		this.id = id;
@@ -55,7 +62,7 @@ public class Product implements Serializable {
 
 	
 	public Long getId() {
-		return id;
+		return this.id;
 	}
 
 
@@ -65,7 +72,7 @@ public class Product implements Serializable {
 
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 
@@ -75,7 +82,7 @@ public class Product implements Serializable {
 
 
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 
@@ -85,7 +92,7 @@ public class Product implements Serializable {
 
 
 	public Double getPrice() {
-		return price;
+		return this.price;
 	}
 
 
@@ -95,7 +102,7 @@ public class Product implements Serializable {
 
 
 	public String getImgUrl() {
-		return imgUrl;
+		return this.imgUrl;
 	}
 
 
@@ -105,7 +112,20 @@ public class Product implements Serializable {
 
 
 	public Set<Category> getCategories() {
-		return categories;
+		return this.categories;
+	}
+	
+	// now when requesting Order and 
+	// JSON shows ItemOrders and Products
+	// the getOrders doesn´t trigger a infinite loop
+	// so Im disabling association Order-->Product
+	@JsonIgnore
+	public Set<Order> getOrders(){
+		Set<Order> set = new HashSet<Order>();
+		for( OrderItem x : this.items) {
+			set.add(x.getOrder());
+		}
+		return set;
 	}
 
 
