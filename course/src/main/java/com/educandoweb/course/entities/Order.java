@@ -8,6 +8,7 @@ import java.util.Set;
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 //********************************************************************
@@ -31,46 +33,46 @@ import jakarta.persistence.Table;
 @Table(name = "tb_order")
 public class Order implements Serializable {
 
-	// @Id annotation tells JPA wich primary key database uses, 
+	// @Id annotation tells JPA wich primary key database uses,
 	// in our case is
 	// @GeneratedValue annotation tells JPA that the key is autoicremented by
 	// the data base GenerationType.IDENTITY
 	// https://www.devmedia.com.br/jpa-como-usar-a-anotacao-id/38508
 
-
-	
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	// annotation @JsonFormat to format date/time in JSON file
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",timezone = "GMT")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
-	
+
 	private Integer orderStatus;
-	
-	// Now need to add annotation to inform JPA how to handle foreign 
+
+	// Now need to add annotation to inform JPA how to handle foreign
 	// keys. Order class has a relationship many-to-one with Client class
 	// So it will be used annotation @ManyToOne
-	// Annotation @JoinColumn to add client id to the table with 
+	// Annotation @JoinColumn to add client id to the table with
 	// the column names as "cliend_id"
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cliend_id")
 	private User client;
-	
-		
-	public Order() {
-	}
-	
-	// One Order to many OrderItens, but 
+
+	// One Order to many OrderItens, but
 	// id of OrderItem id is composite and
 	// thus must map by id.order.
-	@OneToMany( mappedBy = "id.order")
+	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<OrderItem>();
+	
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	private Payment payment;
 
-	public Order(Long id, Instant moment,OrderStatus orderStatus, User client) {
+	public Order() {
+	}
+
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
@@ -78,42 +80,53 @@ public class Order implements Serializable {
 		setOrderStatus(orderStatus);
 	}
 
-	
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public Instant getMoment() {
 		return moment;
 	}
+
 	public void setMoment(Instant moment) {
 		this.moment = moment;
 	}
-	
+
 	public OrderStatus getOrderStatus() {
 		return OrderStatus.valueOf(orderStatus);
 	}
 
 	public void setOrderStatus(OrderStatus orderStatus) {
-		if( orderStatus != null)
-			{
+		if (orderStatus != null) {
 			this.orderStatus = orderStatus.getCode();
-			}
+		}
 	}
 
 	public User getClient() {
 		return client;
 	}
+
 	public void setClient(User client) {
 		this.client = client;
 	}
-	
-	public Set<OrderItem> getItems(){
+
+	public Set<OrderItem> getItems() {
 		return items;
 	}
-	
+
+		
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -138,5 +151,5 @@ public class Order implements Serializable {
 			return false;
 		return true;
 	}
-		
+
 }
