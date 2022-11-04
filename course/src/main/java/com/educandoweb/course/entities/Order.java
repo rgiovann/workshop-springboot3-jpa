@@ -2,6 +2,8 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 //********************************************************************
@@ -60,6 +63,12 @@ public class Order implements Serializable {
 		
 	public Order() {
 	}
+	
+	// One Order to many OrderItens, but 
+	// id of OrderItem id is composite and
+	// thus must map by id.order.
+	@OneToMany( mappedBy = "id.order")
+	private Set<OrderItem> items = new HashSet<OrderItem>();
 
 	public Order(Long id, Instant moment,OrderStatus orderStatus, User client) {
 		super();
@@ -101,6 +110,9 @@ public class Order implements Serializable {
 		this.client = client;
 	}
 	
+	public Set<OrderItem> getItems(){
+		return items;
+	}
 	
 	@Override
 	public int hashCode() {
