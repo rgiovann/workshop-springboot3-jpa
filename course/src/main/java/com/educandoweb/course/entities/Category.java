@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -23,7 +26,17 @@ public class Category implements Serializable {
 	private String name;
 	
 	// Annotation @Transient tells JPA do not interpret this collection
-	@Transient
+	//@Transient
+	
+	
+	
+	// @ManytoMany annotation. Every many-to-many association has two sides, the owning sideand 
+	// the non-owning, or inverse, side. The join table is specified on the owning side. 
+	// If the association is bidirectional, eitherside may be designated as the owning side. 
+	// If the relationship is bidirectional, the non-owning side must use the mappedBy 
+	// element of the ManyToMany annotation to specify the relationship field or property of the owning side. 
+	@JsonIgnore
+	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<Product>();
 	
 	public Category()
