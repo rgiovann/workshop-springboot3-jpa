@@ -27,6 +27,8 @@ public class UserService {
 	// UserService have a dependency from Interface UserRepository
 	// @Autorwired wraps the dependency injection, coder
 	// doesn´t need to worry about coding the pattern
+	// from help: Marks a constructor, field, setter method, or config method 
+	// as to be autowired bySpring's dependency injection facilities.
 	@Autowired
 	private UserRepository repository;
 
@@ -45,6 +47,10 @@ public class UserService {
 		
 		return obj.get();
 		
+	}
+	
+	public User insert(User obj) {
+		return this.repository.save(obj);
 	}
 
 }
