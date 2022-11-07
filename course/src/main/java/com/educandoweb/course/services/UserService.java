@@ -54,10 +54,37 @@ public class UserService {
 	public User insert(User obj) {
 		return this.repository.save(obj);
 	}
+	
+	
 	// create method to delete user by id
     //	
 	public void delete(Long id) {
 		this.repository.deleteById(id);
+	}
+	
+	// create method to delete user by id
+    //	
+	public User update(Long id, User obj) {
+		// Returns a reference to the entity with the given identifier. 
+		// Depending on how the JPA persistence provider isimplemented 
+		// this is very likely to always return an instance and throw an 
+		// jakarta.persistence.EntityNotFoundException on first access. 
+		//Some of them will reject invalid identifiersimmediately.
+		User entity = repository.getReferenceById(id);  // doesn´t access directly the DB, it prepares the objet and then 
+		                                                // access DB, findById on the contrary, access the DB
+		updateData(entity, obj);
+		return repository.save(entity);
+		
+	}
+
+	// create method to update user by id
+    //	
+	private void updateData(User entity, User obj) {
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+
+		
 	}
 
 }
