@@ -49,8 +49,15 @@ public class UserService {
 		
 	}
 	
+	// create method to inser user
+    //
 	public User insert(User obj) {
 		return this.repository.save(obj);
+	}
+	// create method to delete user by id
+    //	
+	public void delete(Long id) {
+		this.repository.deleteById(id);
 	}
 
 }
