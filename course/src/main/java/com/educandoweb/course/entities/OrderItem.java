@@ -37,6 +37,12 @@ public class OrderItem implements Serializable {
 		this.quantity = quantity;
 		this.price = price;
 	}
+	
+	// Enterprise platform, method must have
+	// get prefix
+	public double getSubTotal() {
+		return this.price*this.quantity;
+	}
 
 	// block association OrderItem -->Order
 	@JsonIgnore
@@ -78,6 +84,7 @@ public class OrderItem implements Serializable {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+	
 
 	@Override
 	public int hashCode() {
