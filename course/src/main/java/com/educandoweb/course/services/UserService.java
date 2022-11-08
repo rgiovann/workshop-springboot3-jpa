@@ -13,6 +13,8 @@ import com.educandoweb.course.repositories.UserRepository;
 import com.educandoweb.course.resources.exceptions.DatabaseException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 //************************************
 //    *** SERVICE LAYER CLASS  ***
 //***********************************
@@ -86,11 +88,15 @@ public class UserService {
 		// this is very likely to always return an instance and throw an 
 		// jakarta.persistence.EntityNotFoundException on first access. 
 		//Some of them will reject invalid identifiersimmediately.
+		try {
 		User entity = repository.getReferenceById(id);  // doesn´t access directly the DB, it prepares the objet and then 
 		                                                // access DB, findById on the contrary, access the DB
 		updateData(entity, obj);
 		return repository.save(entity);
-		
+		}
+		catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	// create method to update user by id
