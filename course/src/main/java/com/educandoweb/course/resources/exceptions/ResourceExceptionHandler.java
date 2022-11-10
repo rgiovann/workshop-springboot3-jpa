@@ -32,7 +32,7 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(status).body(err);
 	}	
 	
-// not implemented yet, need to find out where create try,catch structure to handle it.
+//  not implemented yet, need to find out where create try,catch structure to handle it.
 //	@ExceptionHandler(JSONException.class)
 //	public ResponseEntity<StandardError> resourceNotFound(JSONException e, HttpServletRequest request){
 //		String error = "JSON error.";
